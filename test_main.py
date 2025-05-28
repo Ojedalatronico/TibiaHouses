@@ -315,7 +315,7 @@ def test_save_houses_to_file(tmp_path):
             "server": "Antica",
         }
     ]
-    filename = tmp_path / "test_houses.csv"
+    filename = tmp_path / "data/test_houses.csv"
 
     save_houses_to_file(houses, str(filename))
 
@@ -338,10 +338,8 @@ async def test_main_successful_execution():
     mock_client = MagicMock()
     mock_response1 = MagicMock()
     mock_response1.status = 200
-
     mock_response2 = MagicMock()
     mock_response2.status = 200
-
     mock_data = "mock_html_data"
 
     async def mock_text():
@@ -372,10 +370,7 @@ async def test_main_successful_execution():
             "main.fetch_data",
             side_effect=[
                 [mock_response1],  # First call for cities and servers
-                [
-                    mock_response2,
-                    mock_response2,
-                ],  # Multiple responses for houses to avoid the else clause
+                [mock_response2, mock_response2],  # Multiple responses for houses
             ],
         ):
             with patch("main.parse_cities", return_value=mock_cities):

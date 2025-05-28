@@ -23,11 +23,11 @@ async def fetch_data(
 ) -> list[rnet.Response]:
     if form_data is None:
         tasks = [client.get(url) for url in urls]
-        return await asyncio.gather(*tasks)
+        return await asyncio.gather(*tasks, return_exceptions=False)
     else:
         print("Fetching data with form data...")
         tasks = [client.post(urls[0], form=form) for form in form_data]
-        return await asyncio.gather(*tasks)
+        return await asyncio.gather(*tasks, return_exceptions=False)
 
 
 def parse_cities(response: str) -> list[str]:
@@ -79,7 +79,7 @@ def parse_houses(response: str) -> list[dict]:
     return house_data
 
 
-def save_houses_to_file(houses: list[dict], filename: str = "houses.csv"):
+def save_houses_to_file(houses: list[dict], filename: str = "data/houses.csv"):
     # Create the data directory if it doesn't exist
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     pd.DataFrame(houses).to_csv(filename, index=False)
@@ -124,7 +124,7 @@ async def main():
                 f"Failed to fetch houses data, status code: {response.status}"
             )
 
-    save_houses_to_file(result, "data/houses.csv")
+    save_houses_to_file(result, "houses.csv")
 
 
 if __name__ == "__main__":
