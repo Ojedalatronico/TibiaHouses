@@ -114,7 +114,7 @@ async def main():
         if response.status == 200:
             data = await response.text()
             result.extend(parse_houses(data))
-        if response.status == 403:
+        elif response.status == 403:
             continue
         else:
             raise NotAvailableElementError(
