@@ -315,7 +315,7 @@ def test_save_houses_to_file(tmp_path):
             "server": "Antica",
         }
     ]
-    filename = tmp_path / "data/test_houses.csv"
+    filename = tmp_path / "test_houses.csv"
 
     save_houses_to_file(houses, str(filename))
 
