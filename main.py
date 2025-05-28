@@ -1,6 +1,5 @@
 import rnet
 import asyncio
-import os
 from selectolax.parser import HTMLParser
 import pandas as pd
 
@@ -79,9 +78,7 @@ def parse_houses(response: str) -> list[dict]:
     return house_data
 
 
-def save_houses_to_file(houses: list[dict], filename: str = "data/houses.csv"):
-    # Create the data directory if it doesn't exist
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+def save_houses_to_file(houses: list[dict], filename: str = "houses.csv"):
     pd.DataFrame(houses).to_csv(filename, index=False)
 
 
