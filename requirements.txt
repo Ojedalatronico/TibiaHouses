@@ -1,0 +1,3 @@
+rnet>=1.0.0
+pandas>=2.0.0
+selectolax>=0.3.0
