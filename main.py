@@ -1,5 +1,6 @@
 import rnet
 import asyncio
+import os
 from selectolax.parser import HTMLParser
 import pandas as pd
 
@@ -79,6 +80,8 @@ def parse_houses(response: str) -> list[dict]:
 
 
 def save_houses_to_file(houses: list[dict], filename: str = "houses.csv"):
+    # Create the data directory if it doesn't exist
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     pd.DataFrame(houses).to_csv(filename, index=False)
 
 
@@ -121,7 +124,7 @@ async def main():
                 f"Failed to fetch houses data, status code: {response.status}"
             )
 
-    save_houses_to_file(result, "houses.csv")
+    save_houses_to_file(result, "data/houses.csv")
 
 
 if __name__ == "__main__":
