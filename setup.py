@@ -17,10 +17,13 @@ setup(
     url="https://github.com/{username}/TibiaHouses",
     packages=find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.12",
+        "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    python_requires=">=3.13",
+    python_requires=">=3.9",
     install_requires=requirements,
 )
