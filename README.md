@@ -1,103 +1,71 @@
 # TibiaHouses
 
-[![Python application](https://github.com/{username}/new_tibia/actions/workflows/python-app.yml/badge.svg)](https://github.com/{username}/new_tibia/actions/workflows/python-app.yml)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python application](https://github.com/Ojedalatronico/TibiaHouses/actions/workflows/python-app.yml/badge.svg)](https://github.com/Ojedalatronico/TibiaHouses/actions/workflows/python-app.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This project scrapes and saves information about houses in Tibia.
 
-## Description
-
-TibiaHouses is a web scraper that collects information about houses available in the game Tibia from the official website. It saves this data to a CSV file for further analysis.
-
 ## Features
 
-- Fetches data from the Tibia website
-- Scrapes house information including name, size, rent, and status
-- Parses cities and servers available in the game
-- Saves data to CSV format
-
-## Requirements
-
-- Python 3.13+
-- Dependencies listed in requirements.txt
+- Scrapes house data from the official Tibia website
+- Saves results as a CSV in the `data/` folder
+- Modern Python project structure (`src/` and `tests/`)
+- CLI support for easy usage and custom output path
+- Fully tested with pytest
 
 ## Installation
 
-1. Clone this repository
-2. Install dependencies:
-
 ```bash
-pip install -r requirements.txt
-```
-
-For development:
-
-```bash
-pip install -r requirements-dev.txt
+pip install -e .
 ```
 
 ## Usage
 
-Run the main script:
+### Command Line Interface (CLI)
+
+Run the scraper and save results to the default location (`data/houses.csv`):
 
 ```bash
-python main.py
+python -m tibiahouses.main
 ```
 
-This will scrape house data and save it to `houses.csv` in the project directory.
-
-## Testing
-
-Tests are written using pytest. To run the tests:
+Or specify a custom output file:
 
 ```bash
-python -m pytest test_main.py
+python -m tibiahouses.main --output myhouses.csv
 ```
 
-For verbose output:
+### As a Script
+
+You can also use the provided script:
 
 ```bash
-python -m pytest test_main.py -v
+python scrape_houses.py
 ```
 
 ## Project Structure
 
 ```
-├── data/               # Directory for scraped data
-│   └── houses.csv     # Scraped houses data
-├── .github/           # GitHub specific files
-│   └── workflows/     # GitHub Actions workflows
-├── main.py           # Main script
-├── test_main.py      # Tests
-├── requirements.txt   # Production dependencies
-├── requirements-dev.txt # Development dependencies
-├── setup.py          # Package setup file
-├── LICENSE           # MIT License
-├── CONTRIBUTING.md   # Contributing guidelines
-└── README.md         # This file
+├── data/                # Output CSV files
+├── src/
+│   └── tibiahouses/     # Main package code
+├── tests/               # All tests
+├── scrape_houses.py     # Example script entry point
+├── setup.py             # Project metadata
+├── requirements.txt     # Main dependencies
+├── requirements-dev.txt # Dev/test dependencies
+└── README.md
 ```
 
-## CI/CD
+## Testing
 
-This project uses GitHub Actions for Continuous Integration and Deployment. The workflow:
-1. Runs on every push and pull request to the main branch
-2. Tests the code with pytest
-3. Checks code quality with flake8
-4. Runs the scraper
-5. Uploads the scraped data as an artifact
+Run all tests with:
 
-You can see the status of the latest build in the badge at the top of this README.
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+```bash
+pytest
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-* [Tibia](https://www.tibia.com) for providing the house data
-* All contributors who participate in this project
+This project is licensed under the MIT License - see the LICENSE file for details.

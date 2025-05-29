@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add src directory to sys.path for proper imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+
 import pytest
 import asyncio  # noqa: F401
 from unittest.mock import MagicMock, patch
@@ -9,9 +15,11 @@ from tibiahouses.main import (
     parse_servers,
     parse_houses,
     save_houses_to_file,
-    main,
     NotAvailableElementError,
 )
+
+# Import main_cli for testing main functionality
+from tibiahouses.main import main_cli as main
 
 
 @pytest.fixture
@@ -367,7 +375,7 @@ async def test_main_successful_execution():
                 with patch("tibiahouses.main.parse_servers", return_value=mock_servers):
                     with patch("tibiahouses.main.parse_houses", return_value=mock_houses):
                         with patch("tibiahouses.main.save_houses_to_file") as mock_save:
-                            await main()
+                            await main("data/houses.csv")
                             mock_save.assert_called_once_with(
                                 mock_houses + mock_houses, "data/houses.csv"
                             )
@@ -383,5 +391,5 @@ async def test_main_error_handling():
     with patch("tibiahouses.main.create_client", return_value=mock_client):
         with patch("tibiahouses.main.fetch_data", return_value=[mock_response]):
             with pytest.raises(NotAvailableElementError) as excinfo:
-                await main()
+                await main("data/houses.csv")
             assert "Failed to fetch data, status code: 404" in str(excinfo.value)
