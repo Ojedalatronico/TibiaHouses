@@ -3,6 +3,7 @@ import asyncio
 from selectolax.parser import HTMLParser
 import pandas as pd
 import os
+import argparse
 
 
 class NotAvailableElementError(Exception):
@@ -84,7 +85,21 @@ def save_houses_to_file(houses: list[dict], filename: str = "data/houses.csv"):
     pd.DataFrame(houses).to_csv(filename, index=False)
 
 
-async def main():
+def cli():
+    parser = argparse.ArgumentParser(description="Scrape Tibia houses and save to CSV.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="data/houses.csv",
+        help="Output CSV file path (default: data/houses.csv)",
+    )
+    args = parser.parse_args()
+    import asyncio
+
+    asyncio.run(main_cli(args.output))
+
+
+async def main_cli(output_file):
     client = create_client()
     url_cities = ["https://www.tibia.com/community/?subtopic=houses"]
     fetched_data = await fetch_data(client, url_cities)
@@ -122,9 +137,8 @@ async def main():
             raise NotAvailableElementError(
                 f"Failed to fetch houses data, status code: {response.status}"
             )
-
-    save_houses_to_file(result, "data/houses.csv")
+    save_houses_to_file(result, output_file)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    cli()
