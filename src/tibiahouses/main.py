@@ -2,6 +2,7 @@ import rnet
 import asyncio
 from selectolax.parser import HTMLParser
 import pandas as pd
+import os
 
 
 class NotAvailableElementError(Exception):
@@ -78,7 +79,8 @@ def parse_houses(response: str) -> list[dict]:
     return house_data
 
 
-def save_houses_to_file(houses: list[dict], filename: str = "houses.csv"):
+def save_houses_to_file(houses: list[dict], filename: str = "data/houses.csv"):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     pd.DataFrame(houses).to_csv(filename, index=False)
 
 
@@ -121,7 +123,7 @@ async def main():
                 f"Failed to fetch houses data, status code: {response.status}"
             )
 
-    save_houses_to_file(result, "houses.csv")
+    save_houses_to_file(result, "data/houses.csv")
 
 
 if __name__ == "__main__":

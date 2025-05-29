@@ -369,7 +369,7 @@ async def test_main_successful_execution():
                         with patch("tibiahouses.main.save_houses_to_file") as mock_save:
                             await main()
                             mock_save.assert_called_once_with(
-                                mock_houses + mock_houses, "houses.csv"
+                                mock_houses + mock_houses, "data/houses.csv"
                             )
 
 
