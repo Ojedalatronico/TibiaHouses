@@ -2,7 +2,7 @@ import pytest
 import asyncio  # noqa: F401
 from unittest.mock import MagicMock, patch
 import pandas as pd
-from main import (
+from tibiahouses.main import (
     create_client,
     fetch_data,  # noqa: F401
     parse_cities,
@@ -159,7 +159,7 @@ def sample_html_response():
 
 def test_create_client():
     """Test client creation."""
-    with patch("main.rnet.Client") as mock_client_class:
+    with patch("tibiahouses.main.rnet.Client") as mock_client_class:
         mock_client_instance = MagicMock()
         mock_client_class.return_value = mock_client_instance
 
@@ -174,9 +174,7 @@ async def test_fetch_data_without_form_data(mock_client):
     """Test fetching data without form data."""
     urls = ["https://example.com"]
     mock_response = MagicMock()
-
-    # Patch the fetch_data function directly
-    with patch("main.fetch_data", return_value=[mock_response]) as mock_fetch:
+    with patch("tibiahouses.main.fetch_data", return_value=[mock_response]) as mock_fetch:
         result = await mock_fetch(mock_client, urls)
         assert result == [mock_response]
 
@@ -187,9 +185,7 @@ async def test_fetch_data_with_form_data(mock_client):
     urls = ["https://example.com"]
     form_data = [[("key1", "value1"), ("key2", "value2")]]
     mock_response = MagicMock()
-
-    # Patch the fetch_data function directly
-    with patch("main.fetch_data", return_value=[mock_response]) as mock_fetch:
+    with patch("tibiahouses.main.fetch_data", return_value=[mock_response]) as mock_fetch:
         with patch("builtins.print") as mock_print:  # noqa: F841
             result = await mock_fetch(mock_client, urls, form_data)
             assert result == [mock_response]
@@ -275,8 +271,7 @@ def test_parse_houses():
         </div>
     </div>
     """
-    # Mock the parse_houses function to avoid the HTML parsing issues
-    with patch("main.parse_houses") as mock_parse_houses:
+    with patch("tibiahouses.main.parse_houses") as mock_parse_houses:
         mock_parse_houses.return_value = [
             {
                 "name": "House One",
@@ -334,7 +329,6 @@ def test_save_houses_to_file(tmp_path):
 @pytest.mark.asyncio
 async def test_main_successful_execution():
     """Test main function with successful execution."""
-    # Mock the client and response
     mock_client = MagicMock()
     mock_response1 = MagicMock()
     mock_response1.status = 200
@@ -348,11 +342,8 @@ async def test_main_successful_execution():
     mock_response1.text = mock_text
     mock_response2.text = mock_text
 
-    # Mock cities and servers
     mock_cities = ["Thais"]
     mock_servers = ["Antica"]
-
-    # Mock houses data
     mock_houses = [
         {
             "name": "House One",
@@ -364,19 +355,18 @@ async def test_main_successful_execution():
         }
     ]
 
-    # Set up mocks
-    with patch("main.create_client", return_value=mock_client):
+    with patch("tibiahouses.main.create_client", return_value=mock_client):
         with patch(
-            "main.fetch_data",
+            "tibiahouses.main.fetch_data",
             side_effect=[
                 [mock_response1],  # First call for cities and servers
                 [mock_response2, mock_response2],  # Multiple responses for houses
             ],
         ):
-            with patch("main.parse_cities", return_value=mock_cities):
-                with patch("main.parse_servers", return_value=mock_servers):
-                    with patch("main.parse_houses", return_value=mock_houses):
-                        with patch("main.save_houses_to_file") as mock_save:
+            with patch("tibiahouses.main.parse_cities", return_value=mock_cities):
+                with patch("tibiahouses.main.parse_servers", return_value=mock_servers):
+                    with patch("tibiahouses.main.parse_houses", return_value=mock_houses):
+                        with patch("tibiahouses.main.save_houses_to_file") as mock_save:
                             await main()
                             mock_save.assert_called_once_with(
                                 mock_houses + mock_houses, "houses.csv"
@@ -386,14 +376,12 @@ async def test_main_successful_execution():
 @pytest.mark.asyncio
 async def test_main_error_handling():
     """Test main function error handling."""
-    # Mock client and error response
     mock_client = MagicMock()
     mock_response = MagicMock()
     mock_response.status = 404
 
-    # Set up mocks for error case
-    with patch("main.create_client", return_value=mock_client):
-        with patch("main.fetch_data", return_value=[mock_response]):
+    with patch("tibiahouses.main.create_client", return_value=mock_client):
+        with patch("tibiahouses.main.fetch_data", return_value=[mock_response]):
             with pytest.raises(NotAvailableElementError) as excinfo:
                 await main()
             assert "Failed to fetch data, status code: 404" in str(excinfo.value)
